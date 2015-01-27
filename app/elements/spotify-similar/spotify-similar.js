@@ -134,7 +134,7 @@ Polymer({
         var labelsNode = this.shadowRoot.querySelector('.labels');
 
         var labels = labelsElement.selectAll('.label');
-
+        
         var zoom = d3.behavior.zoom()
             //.scaleExtent([10, 10])
             .on('zoom', function() {
@@ -170,7 +170,7 @@ Polymer({
             labels.enter().append('span')
                 .attr('class', 'label')
                 .append('span')
-                //.call(force.drag)
+                .call(force.drag)
                 .text(function(d) {
                     return d.name;
                 })
