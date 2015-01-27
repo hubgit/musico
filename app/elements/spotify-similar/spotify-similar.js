@@ -144,7 +144,7 @@ Polymer({
                 labelsNode.style['-webkit-transform'] = transform;
             }.bind(this));
 
-        container.call(zoom);
+        main.call(zoom);
 
         var draw = function() {
             var z = this.z;
