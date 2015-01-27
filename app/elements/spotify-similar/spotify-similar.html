@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input-decorator.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/web-resource/web-resource.html">
+
+<polymer-element name="spotify-similar">
+    <template>
+        <link rel="stylesheet" href="spotify-similar.css">
+
+        <div id="graph">
+            <form on-submit="{{ fetchCollection }}">
+                <div layout horizontal>
+                    <div>
+                        <paper-input-decorator label="Artist">
+                            <input type="text" value="{{ artist }}">
+                        </paper-input-decorator>
+                    </div>
+
+                    <div>
+                        <paper-button on-tap="{{ fetchCollection }}">Search</paper-button>
+                    </div>
+                </div>
+
+                <template if="{{ selected }}">
+                    <iframe src="https://embed.spotify.com/?uri=spotify:artist:{{ selected }}"
+                    width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
+                </template>
+            </form>
+        </div>
+    </template>
+
+    <script src="spotify-similar.js"></script>
+</polymer-element>
