@@ -21,10 +21,6 @@ paper-button:hover {
     background-color: #48DF5A;
 }
 
-form {
-    padding: 10px;
-}
-
 iframe {
     margin: 0 -10px;
 }
@@ -38,6 +34,8 @@ iframe {
     top: 0;
     left: 0;
     z-index: 500;
+    padding: 10px;
+    width: 300px;
 }
 
 .label {
