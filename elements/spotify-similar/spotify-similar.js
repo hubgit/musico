@@ -31,6 +31,7 @@ Polymer({
             uri: artist.uri,
             href: artist.href,
             name: artist.name,
+            popularity: artist.popularity,
         };
     },
     search: function(name) {
@@ -134,12 +135,14 @@ Polymer({
             var z = this.z;
 
             labels.attr('style', function(d) {
-                var transform = 'translate3d(' + (d.x - (this.offsetWidth / 2)) + 'px,' + d.y + 'px,' + z + 'px)';
+                var transform = 'translate3d(' + (d.x - (this.offsetWidth / 2)) + 'px,' + d.y + 'px,' + (z + d.popularity * 5) + 'px)';
 
                 return 'transform: ' + transform + '; -webkit-transform: ' + transform;
             }).attr('data-expanded', function(d) {
                 return d.expanded ? 'true' : 'false';
-            });
+            }).attr('data-selected', function(d) {
+                return d.selected ? 'true' : 'false';
+            })
         }.bind(this);
 
         var run = function() {
@@ -152,15 +155,26 @@ Polymer({
             labels.enter().append('span')
                 .attr('class', 'label')
                 .append('span')
+                //.call(force.drag)
                 .text(function(d) {
                     return d.name;
                 })
                 .on('click', function(d) {
+                    if (d3.event.defaultPrevented) return; // ignore drag
+
                     this.selected = d.id;
-                    this.z -= 10;
+
+                    d.selected = true;
+
+                    labels.attr('data-selected', function(d) {
+                        return d.selected ? 'true' : 'false';
+                    });
 
                     if (!d.expanded) {
-                        this.similar(d).then(run.bind(this));
+                        this.similar(d).then(function() {
+                            this.z -= 10;
+                            run();
+                        }.bind(this));
                     }
                 }.bind(this));
 
