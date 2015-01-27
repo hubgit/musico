@@ -4,7 +4,6 @@ Polymer({
     ready: function() {
         this.graph = {};
         this.nodes = {};
-        this.artist = 'Polvo';
         this.fetchCollection();
     },
     fetchCollection: function(e) {
