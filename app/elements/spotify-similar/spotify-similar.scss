@@ -14,11 +14,11 @@ paper-button {
     color: white;
     border-radius: 50px;
     text-transform: none;
-    background-color: #10DD28;
+    background-color: rgb(30, 140, 32);
 }
 
 paper-button:hover {
-    background-color: #48DF5A;
+    background-color: #99C900;
 }
 
 iframe {
@@ -48,13 +48,19 @@ iframe {
     background: #000;
     font-size: 15px;
     padding: 5px 10px;
+    opacity: 0.9;
 }
 
 .label:hover {
     z-index: 1000;
+    opacity: 1;
 }
 
-.label:hover,
+.label:hover {
+    background-color: rgb(30, 140, 32); /*#759901;*/
+}
+
+.label[data-selected=true],
 .label[data-expanded=true] {
     background-color: rgb(30, 140, 32);
 }
