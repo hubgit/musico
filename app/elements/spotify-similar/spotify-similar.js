@@ -4,7 +4,8 @@ Polymer({
     ready: function() {
         this.graph = {};
         this.nodes = {};
-        this.fetchCollection();
+        this.$.search.focus();
+        //this.fetchCollection();
     },
     fetchCollection: function(e) {
         if (e) {
