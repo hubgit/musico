@@ -113,7 +113,9 @@ Polymer({
             var z = this.z;
 
             labels.attr('style', function(d) {
-                return 'transform: translate3d(' + (d.x - (this.offsetWidth / 2)) + 'px,' + d.y + 'px,' + z + 'px);';
+                var transform = 'translate3d(' + (d.x - (this.offsetWidth / 2)) + 'px,' + d.y + 'px,' + z + 'px)';
+                
+                return 'transform: ' + transform + '; -webkit-transform: ' + transform;
             }).attr('data-expanded', function(d) {
                 return d.expanded ? 'true' : 'false'
             })
