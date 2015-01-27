@@ -47,6 +47,8 @@ Polymer({
 
             var artist = this.parseArtist(data.artists.items[0]);
 
+            this.selected = artist.id;
+
             if (!this.nodes[artist.uri]) {
                 this.nodes[artist.uri] = artist;
                 this.graph.nodes.push(artist);
