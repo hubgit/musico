@@ -12,7 +12,7 @@ Polymer({
             e.preventDefault();
         }
 
-        this.z = 0;
+        this.z = -100;
 
         this.nodes = {};
 
@@ -51,7 +51,7 @@ Polymer({
             }
 
             var nameMatches = data.artists.items.filter(function(item) {
-                return item.name.toLowerCase().trim().replace(/[^\w\s]/g, '') == normalisedName;
+                return item.name.toLowerCase().trim().replace(/[^\w\s]/g, '') === normalisedName;
             });
 
             var artist = nameMatches.length ? nameMatches[0] : data.artists.items[0];
@@ -100,6 +100,9 @@ Polymer({
             existing.parentNode.removeChild(existing);
         }
 
+        var el = this.$.graph;
+        var container = d3.select(el);
+
         var width = this.$.graph.offsetWidth;
         var height = this.$.graph.offsetHeight;
 
@@ -123,13 +126,25 @@ Polymer({
             .links(this.graph.links)
             .on('start', tick);
 
-        var container = d3.select(this.$.graph)
+        var main = container
             .append('div').attr('class', 'main')
             .attr('style', 'position: relative; width:' + width + 'px; height:' + height + 'px');
 
-        var labelsElement = container.append('div').attr('class', 'labels');
+        var labelsElement = main.append('div').attr('class', 'labels');
+        var labelsNode = this.shadowRoot.querySelector('.labels');
 
         var labels = labelsElement.selectAll('.label');
+
+        var zoom = d3.behavior.zoom()
+            //.scaleExtent([10, 10])
+            .on('zoom', function() {
+                var transform = 'translate(' + d3.event.translate[0] + 'px,' + d3.event.translate[1] + 'px) scale(' + d3.event.scale + ')';
+
+                labelsNode.style.transform = transform;
+                labelsNode.style['-webkit-transform'] = transform;
+            }.bind(this));
+
+        container.call(zoom);
 
         var draw = function() {
             var z = this.z;
@@ -142,7 +157,7 @@ Polymer({
                 return d.expanded ? 'true' : 'false';
             }).attr('data-selected', function(d) {
                 return d.selected ? 'true' : 'false';
-            })
+            });
         }.bind(this);
 
         var run = function() {
@@ -160,7 +175,9 @@ Polymer({
                     return d.name;
                 })
                 .on('click', function(d) {
-                    if (d3.event.defaultPrevented) return; // ignore drag
+                    if (d3.event.defaultPrevented) {
+                        return; // ignore drag
+                    }
 
                     this.selected = d.id;
 
