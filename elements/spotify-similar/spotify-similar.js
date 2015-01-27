@@ -37,7 +37,7 @@ Polymer({
         var normalisedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
 
         var resource = new Resource('https://api.spotify.com/v1/search', {
-            q: name,
+            q: '"' + name '"',
             type: 'artist',
             limit: 10,
         });
