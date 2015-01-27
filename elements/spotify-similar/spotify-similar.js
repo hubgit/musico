@@ -21,6 +21,8 @@ Polymer({
             links: []
         };
 
+        this.$.search.blur();
+
         this.search(this.artist).then(this.similar.bind(this)).then(this.draw.bind(this));
     },
     parseArtist: function(artist) {
@@ -29,13 +31,15 @@ Polymer({
             uri: artist.uri,
             href: artist.href,
             name: artist.name,
-        }
+        };
     },
     search: function(name) {
-        var resource = Resource('https://api.spotify.com/v1/search', {
+        var normalisedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
+
+        var resource = new Resource('https://api.spotify.com/v1/search', {
             q: name,
             type: 'artist',
-            limit: 1,
+            limit: 10,
         });
 
         return resource.get('json').then(function(data) {
@@ -45,7 +49,13 @@ Polymer({
                 this.error = 'No matching artists found';
             }
 
-            var artist = this.parseArtist(data.artists.items[0]);
+            var nameMatches = data.artists.items.filter(function(item) {
+                return item.name.toLowerCase().trim().replace(/[^\w\s]/g, '') == normalisedName;
+            });
+
+            var artist = nameMatches.length ? nameMatches[0] : data.artists.items[0];
+
+            artist = this.parseArtist(artist);
 
             this.selected = artist.id;
 
@@ -92,6 +102,17 @@ Polymer({
         var width = this.$.graph.offsetWidth;
         var height = this.$.graph.offsetHeight;
 
+        var tick = function() {
+            //force.tick();
+            //force.tick();
+            force.tick();
+            requestAnimationFrame(draw);
+
+            if (force.alpha() > 0) {
+                requestAnimationFrame(tick);
+            }
+        };
+
         var force = d3.layout.force()
             .linkDistance(50)
             .charge(-1000)
@@ -114,32 +135,21 @@ Polymer({
 
             labels.attr('style', function(d) {
                 var transform = 'translate3d(' + (d.x - (this.offsetWidth / 2)) + 'px,' + d.y + 'px,' + z + 'px)';
-                
+
                 return 'transform: ' + transform + '; -webkit-transform: ' + transform;
             }).attr('data-expanded', function(d) {
-                return d.expanded ? 'true' : 'false'
-            })
+                return d.expanded ? 'true' : 'false';
+            });
         }.bind(this);
-
-        function tick() {
-            //force.tick();
-            //force.tick();
-            force.tick();
-            requestAnimationFrame(draw);
-
-            if (force.alpha() > 0) {
-                requestAnimationFrame(tick);
-            }
-        }
 
         var run = function() {
             labels = labels.data(this.graph.nodes, function(d) {
                 return d.uri;
-            })
+            });
 
             //labels.exit().remove();
 
-            var spans = labels.enter().append('span')
+            labels.enter().append('span')
                 .attr('class', 'label')
                 .append('span')
                 .text(function(d) {
@@ -159,4 +169,4 @@ Polymer({
 
         run();
     }
-})
+});
