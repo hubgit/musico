@@ -38,6 +38,11 @@ iframe {
     width: 300px;
 }
 
+#graph .main {
+    user-select: none;
+    cursor: move;
+}
+
 .label {
     font-weight: 200;
     cursor: pointer;
