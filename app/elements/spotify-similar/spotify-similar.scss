@@ -69,3 +69,13 @@ iframe {
 .label[data-expanded=true] {
     background-color: rgb(30, 140, 32);
 }
+
+.play {
+    color: #333;
+    font-weight: 200;
+    text-decoration: none;
+}
+
+.play:hover {
+    color: rgb(30, 140, 32);
+}

@@ -21,9 +21,10 @@
                     </div>
                 </div>
 
-                <template if="{{ selected }}">
-                    <iframe src="https://embed.spotify.com/?uri=spotify:artist:{{ selected }}"
-                    width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
+                <template repeat="{{ selected }}">
+                    <div>
+                        <a class="play" href="spotify:app:radio:artist:{{ id }}">&#9654; {{ name }}</a>
+                    </div>
                 </template>
             </form>
         </div>

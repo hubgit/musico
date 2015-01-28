@@ -21,6 +21,8 @@ Polymer({
             links: []
         };
 
+        this.selected = [];
+
         this.$.search.blur();
 
         this.search(this.artist).then(this.similar.bind(this)).then(this.draw.bind(this));
@@ -33,6 +35,16 @@ Polymer({
             name: artist.name,
             popularity: artist.popularity,
         };
+    },
+    addSelection: function(artist) {
+        this.selected.push({
+            name: artist.name,
+            id: artist.id.replace(/^spotify:artist:/, '')
+        });
+
+        if (this.selected.length > 3) {
+            this.selected = this.selected.slice(-3);
+        }
     },
     search: function(name) {
         var normalisedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
@@ -58,7 +70,7 @@ Polymer({
 
             artist = this.parseArtist(artist);
 
-            this.selected = artist.id;
+            this.addSelection(artist);
 
             if (!this.nodes[artist.uri]) {
                 this.nodes[artist.uri] = artist;
@@ -134,7 +146,7 @@ Polymer({
         var labelsNode = this.shadowRoot.querySelector('.labels');
 
         var labels = labelsElement.selectAll('.label');
-        
+
         var zoom = d3.behavior.zoom()
             //.scaleExtent([10, 10])
             .on('zoom', function() {
@@ -179,7 +191,7 @@ Polymer({
                         return; // ignore drag
                     }
 
-                    this.selected = d.id;
+                    this.addSelection(d);
 
                     d.selected = true;
 
