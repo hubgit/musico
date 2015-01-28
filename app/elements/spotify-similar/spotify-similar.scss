@@ -52,17 +52,18 @@ iframe {
     color: white;
     background: #000;
     font-size: 13px;
-    padding: 5px 10px;
-    opacity: 0.9;
+    opacity: 1;
 }
 
 .label:hover {
     z-index: 1000;
     opacity: 1;
+    background-color: rgb(30, 140, 32); /*#759901;*/
 }
 
-.label:hover {
-    background-color: rgb(30, 140, 32); /*#759901;*/
+.label span {
+    display: inline-block;
+    padding: 5px 10px;
 }
 
 .label[data-selected=true],
