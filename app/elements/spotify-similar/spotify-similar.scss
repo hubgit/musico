@@ -43,6 +43,10 @@ iframe {
     cursor: move;
 }
 
+.labels {
+    transform-style: preserve-3d;
+}
+
 .label {
     font-weight: 200;
     cursor: pointer;
