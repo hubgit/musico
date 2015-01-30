@@ -7,21 +7,30 @@
         <link rel="stylesheet" href="spotify-similar.css">
 
         <div id="graph">
-            <form on-submit="{{ fetchCollection }}">
+            <form on-submit="{{ fetchCollection }}" data-searching?="{{ searching }}">
                 <div layout horizontal>
                     <div flex>
                         <paper-input-decorator label="Artist">
-                            <input type="search" value="{{ artist }}" id="search">
+                            <input type="search" value="{{ artist }}" id="search"
+                                on-focus="{{ focus }}" on-blur="{{ blur }}">
                         </paper-input-decorator>
                     </div>
                 </div>
 
+                <!--
                 <template repeat="{{ selected }}">
                     <div>
                         <a class="play" href="spotify:app:radio:artist:{{ id }}">&#9654; {{ name }}</a>
                     </div>
                 </template>
+                -->
             </form>
+
+            <template repeat="{{ item, index in selected }}">
+                <a class="roll" href="spotify:app:radio:artist:{{ item.id }}"
+                    title="{{ item.name }}" style="background-image:url('{{ item.image }}');
+                        transform:translate3d(-{{ index * 10 }}vw, 0, 0)"></a>
+            </template>
         </div>
     </template>
 

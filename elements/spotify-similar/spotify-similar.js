@@ -7,6 +7,12 @@ Polymer({
         this.$.search.focus();
         //this.fetchCollection();
     },
+    focus: function() {
+        this.searching = true;
+    },
+    blur: function() {
+        this.searching = false;
+    },
     fetchCollection: function(e) {
         if (e) {
             e.preventDefault();
@@ -28,23 +34,52 @@ Polymer({
         this.search(this.artist).then(this.similar.bind(this)).then(this.draw.bind(this));
     },
     parseArtist: function(artist) {
-        return {
-            id: artist.uri,
-            uri: artist.uri,
-            href: artist.href,
-            name: artist.name,
-            popularity: artist.popularity,
-        };
+        artist.id = artist.uri;
+
+        return artist;
     },
-    addSelection: function(artist) {
-        this.selected.push({
-            name: artist.name,
-            id: artist.id.replace(/^spotify:artist:/, '')
+    bestImage: function(images) {
+        images.forEach(function(image) {
+            image.diff = Math.abs(400 - image.width);
+        })
+
+        images.sort(function(a, b) {
+            return a.diff - b.diff;
         });
 
-        if (this.selected.length > 3) {
-            this.selected = this.selected.slice(-3);
-        }
+        return images.length ? images[0].url : 'images/placeholder.png';
+    },
+    addSelection: function(artist) {
+        var image = this.bestImage(artist.images);
+
+        //this.topTrackImage(artist).then(function(image) {
+            this.selected.push({
+                name: artist.name,
+                id: artist.id.replace(/^spotify:artist:/, ''),
+                image: image,
+            });
+
+            if (this.selected.length > 10) {
+                this.async(function() {
+                    this.selected = this.selected.slice(-10);
+                });
+            }
+        //}.bind(this));
+    },
+    topTrackImage: function(artist) {
+        var resource = new Resource(artist.href + '/top-tracks', {
+            country: 'gb',
+        });
+
+        return resource.get('json').then(function(data) {
+            if (!data.tracks.length) {
+                return this.bestImage(artist.images);
+            }
+
+            var album = data.tracks[0].album;
+
+            return this.bestImage(album.images);
+        }.bind(this));
     },
     search: function(name) {
         var normalisedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
@@ -130,9 +165,9 @@ Polymer({
         };
 
         var force = d3.layout.force()
-            .linkDistance(50)
-            .charge(-400)
-            //.friction(0.1)
+            .linkDistance(70)
+            .charge(-800)
+            .friction(0.5)
             .size([width, height])
             .nodes(this.graph.nodes)
             .links(this.graph.links)
@@ -162,9 +197,18 @@ Polymer({
             var z = this.z;
 
             labels.attr('style', function(d) {
-                var transform = 'translate3d(' + (d.x - (this.offsetWidth / 2)) + 'px,' + d.y + 'px,' + (z + d.popularity * 5) + 'px)';
+                //var transform = 'translate3d(' + (d.x - (this.offsetWidth / 2)) + 'px,' + d.y + 'px,' + (z + d.popularity * 5) + 'px)';
+                var transform = 'translate3d(' + (d.x - (this.offsetWidth / 2)) + 'px,' + d.y + 'px, 0)';
 
-                return 'transform: ' + transform + '; -webkit-transform: ' + transform;
+                var size = 10 + ((d.popularity / 40) * 5) + 'px';
+
+                var styles = [
+                    'transform:' + transform,
+                    '-webkit-transform:' + transform,
+                    'font-size:' + size
+                ];
+
+                return styles.join(';');
             }).attr('data-expanded', function(d) {
                 return d.expanded ? 'true' : 'false';
             }).attr('data-selected', function(d) {
