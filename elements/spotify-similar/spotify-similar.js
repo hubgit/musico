@@ -131,7 +131,7 @@ Polymer({
 
         var force = d3.layout.force()
             .linkDistance(50)
-            .charge(-1000)
+            .charge(-400)
             //.friction(0.1)
             .size([width, height])
             .nodes(this.graph.nodes)
