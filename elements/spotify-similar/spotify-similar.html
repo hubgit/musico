@@ -1,6 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input-decorator.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/web-resource/web-resource.html">
 
 <polymer-element name="spotify-similar">
@@ -14,10 +13,6 @@
                         <paper-input-decorator label="Artist">
                             <input type="text" value="{{ artist }}" id="search">
                         </paper-input-decorator>
-                    </div>
-
-                    <div>
-                        <paper-button on-tap="{{ fetchCollection }}">Search</paper-button>
                     </div>
                 </div>
 
