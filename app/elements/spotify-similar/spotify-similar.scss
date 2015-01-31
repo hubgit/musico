@@ -1,63 +1,60 @@
 :host {
-   display: block;
-   -webkit-backface-visibility: hidden;
-   -webkit-perspective: 1000;
-   position: relative;
-}
-
-:host, d3-force {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+  display: block;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 paper-button {
-    color: white;
-    border-radius: 50px;
-    text-transform: none;
-    background-color: rgb(30, 140, 32);
+  color: white;
+  border-radius: 50px;
+  text-transform: none;
+  background-color: rgb(30, 140, 32);
 }
 
 paper-button:hover {
-    background-color: #99C900;
+  background-color: #99C900;
 }
 
 form {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 500;
-    padding: 10px;
-    width: 300px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 500;
+  padding: 10px;
+  width: 300px;
 }
 
 .play {
-    color: #333;
-    font-weight: 200;
-    text-decoration: none;
-    padding: 0 5px;
-    display: inline-block;
+  color: #333;
+  font-weight: 200;
+  text-decoration: none;
+  padding: 0 5px;
+  display: inline-block;
 }
 
 .play:hover {
-    color: rgb(30, 140, 32);
+  color: rgb(30, 140, 32);
 }
 
 .roll {
-    display: inline-block;
-    width: 20vh;
-    height: 20vh;
-    background-position: center center;
-    background-size: cover;
-    border-radius: 50%;
-    z-index: 100;
-    position: absolute;
-    top: 0;
-    right: 0;
-    transition: transform 0.5s;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  width: 20vh;
+  height: 20vh;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 50%;
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: transform 0.5s;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
 .roll:hover {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
 }
