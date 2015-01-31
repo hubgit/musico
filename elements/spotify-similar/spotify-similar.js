@@ -41,7 +41,7 @@ Polymer({
     bestImage: function(images) {
         images.forEach(function(image) {
             image.diff = Math.abs(400 - image.width);
-        })
+        });
 
         images.sort(function(a, b) {
             return a.diff - b.diff;
@@ -194,7 +194,7 @@ Polymer({
         main.call(zoom);
 
         var draw = function() {
-            var z = this.z;
+            //var z = this.z;
 
             labels.attr('style', function(d) {
                 //var transform = 'translate3d(' + (d.x - (this.offsetWidth / 2)) + 'px,' + d.y + 'px,' + (z + d.popularity * 5) + 'px)';
