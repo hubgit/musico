@@ -13,14 +13,12 @@
                         on-focus="{{ focus }}" on-blur="{{ blur }}">
                 </paper-input-decorator>
             </form>
-
-            <div id="selected">
-                <template repeat="{{ item, index in selected }}">
-                    <a class="roll" href="spotify:app:radio:artist:{{ item.id }}"
-                        title="{{ item.name }}" style="background-image:url('{{ item.image }}');
-                            transform:translate3d(-{{ index * 10 }}vw, 0, 0)"></a>
-                </template>
-            </div>
+            
+            <template repeat="{{ item, index in selected }}">
+                <a class="roll" href="spotify:app:radio:artist:{{ item.id }}"
+                    title="{{ item.name }}" style="background-image:url('{{ item.image }}');
+                        transform:translate3d(-{{ index * 10 }}vw, 0, 0)"></a>
+            </template>
         </div>
     </template>
 
