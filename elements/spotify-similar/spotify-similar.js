@@ -4,6 +4,7 @@ Polymer({
     images: false,
     ready: function() {
         this.$.graph.expand = this.expand.bind(this);
+        this.$.graph.nodeSize = this.nodeSize;
         this.$.search.focus();
         this.selected = [];
         this.images = this.$.graph.clientWidth > 800;
@@ -13,18 +14,17 @@ Polymer({
         this.$.search.blur();
         this.$.graph.reset();
         this.selected = [];
-        this.search(this.artist).then(function(artist) {
-            this.addSelection(artist);
-
-            this.similar(artist).then(function(links) {
-                this.$.graph.addLinks(links);
-            }.bind(this));
+        this.search(this.artist).then(function(artist) {            
+            this.$.graph.click(artist);
         }.bind(this));
     },
     expand: function(source) {
         this.addSelection(source);
 
         return this.similar(source);
+    },
+    nodeSize: function(d) {
+        return 10 + ((d.popularity / 40) * 5) + 'px';
     },
     bestImage: function(images) {
         images.forEach(function(image) {
