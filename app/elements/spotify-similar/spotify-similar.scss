@@ -2,9 +2,10 @@
    display: block;
    -webkit-backface-visibility: hidden;
    -webkit-perspective: 1000;
+   position: relative;
 }
 
-:host, #graph, #graph .main {
+:host, d3-force {
     height: 100%;
     width: 100%;
     overflow: hidden;
@@ -21,15 +22,7 @@ paper-button:hover {
     background-color: #99C900;
 }
 
-iframe {
-    margin: 0 -10px;
-}
-
-#graph {
-    position: relative;
-}
-
-#graph form {
+form {
     position: absolute;
     top: 0;
     left: 0;
@@ -38,49 +31,33 @@ iframe {
     width: 300px;
 }
 
-#graph .main {
-    user-select: none;
-    cursor: move;
-}
-
-.labels {
-    transform-style: preserve-3d;
-}
-
-.label {
-    font-weight: 200;
-    cursor: pointer;
-    position: absolute;
-    display: inline-block;
-    border-radius: 10px;
-    color: white;
-    background: #000;
-    font-size: 13px;
-    opacity: 1;
-}
-
-.label:hover {
-    z-index: 1000;
-    opacity: 1;
-    background-color: rgb(30, 140, 32); /*#759901;*/
-}
-
-.label span {
-    display: inline-block;
-    padding: 5px 10px;
-}
-
-.label[data-selected=true],
-.label[data-expanded=true] {
-    background-color: rgb(30, 140, 32);
-}
-
 .play {
     color: #333;
     font-weight: 200;
     text-decoration: none;
+    padding: 0 5px;
+    display: inline-block;
 }
 
 .play:hover {
     color: rgb(30, 140, 32);
+}
+
+.roll {
+    display: inline-block;
+    width: 20vh;
+    height: 20vh;
+    background-position: center center;
+    background-size: cover;
+    border-radius: 50%;
+    z-index: 100;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: transform 0.5s;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.roll:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
 }
