@@ -1,34 +1,41 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input-decorator.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/web-resource/web-resource.html">
 
 <polymer-element name="spotify-similar">
     <template>
         <link rel="stylesheet" href="spotify-similar.css">
 
-        <div id="graph">
-            <form on-submit="{{ fetchCollection }}" data-searching?="{{ searching }}">
-                <div layout horizontal>
-                    <div flex>
-                        <paper-input-decorator label="Artist">
-                            <input type="search" value="{{ artist }}" id="search"
-                                on-focus="{{ focus }}" on-blur="{{ blur }}">
-                        </paper-input-decorator>
-                    </div>
-                    <div>
-                        <paper-button on-tap="{{ fetchCollection }}">Search</paper-button>
-                    </div>
+        <form on-submit="{{ submit }}">
+            <div layout horizontal>
+                <div flex>
+                    <paper-input-decorator label="Artist">
+                        <input type="text" value="{{ artist }}" id="search">
+                    </paper-input-decorator>
                 </div>
-            </form>
 
+                <div>
+                    <paper-button on-tap="{{ submit }}">Search</paper-button>
+                </div>
+            </div>
+
+            <template repeat="{{ selected }}">
+                <div>
+                    <a class="play" href="spotify:app:radio:artist:{{ id }}">&#9654; {{ name }}</a>
+                </div>
+            </template>
+        </form>
+
+        <d3-force id="graph"></d3-force>
+
+        <template if="{{ images }}">
             <template repeat="{{ item, index in selected }}">
                 <a class="roll" href="spotify:app:radio:artist:{{ item.id }}"
                     title="{{ item.name }}" style="background-image:url('{{ item.image }}');
-                        transform:translate3d(-{{ index * 20 }}vw, 0, 0);
-                        -webkit-transform:translate3d(-{{ index * 20 }}vw, 0, 0)"></a>
+                        transform:translate3d(0, {{ index * 20 }}vh, 0);
+                        -webkit-transform:translate3d(0, {{ index * 20 }}vh, 0)"></a>
             </template>
-        </div>
+        </template>
     </template>
 
     <script src="spotify-similar.js"></script>
