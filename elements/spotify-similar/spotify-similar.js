@@ -59,9 +59,9 @@ Polymer({
                 image: image,
             });
 
-            if (this.selected.length > 10) {
+            if (this.selected.length > 5) {
                 this.async(function() {
-                    this.selected = this.selected.slice(-10);
+                    this.selected = this.selected.slice(-5);
                 });
             }
         //}.bind(this));
