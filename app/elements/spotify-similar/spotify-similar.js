@@ -6,7 +6,7 @@ Polymer({
         this.$.graph.expand = this.expand.bind(this);
         this.$.search.focus();
         this.selected = [];
-        this.images = this.$.graph.innerWidth > 800;
+        this.images = this.$.graph.clientWidth > 800;
     },
     submit: function(e) {
         e.preventDefault();
