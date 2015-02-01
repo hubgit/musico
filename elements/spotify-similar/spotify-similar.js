@@ -14,7 +14,7 @@ Polymer({
         this.$.search.blur();
         this.$.graph.reset();
         this.selected = [];
-        this.search(this.artist).then(function(artist) {            
+        this.search(this.artist).then(function(artist) {
             this.$.graph.click(artist);
         }.bind(this));
     },
@@ -24,7 +24,7 @@ Polymer({
         return this.similar(source);
     },
     nodeSize: function(d) {
-        return 10 + ((d.popularity / 40) * 5) + 'px';
+        return 12 + ((d.popularity / 40) * 5) + 'px';
     },
     bestImage: function(images) {
         images.forEach(function(image) {
