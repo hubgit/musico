@@ -24,7 +24,7 @@ Polymer({
         return this.similar(source);
     },
     nodeSize: function(d) {
-        return 12 + ((d.popularity / 40) * 5) + 'px';
+        return 11 + ((d.popularity / 40) * 5) + 'px';
     },
     bestImage: function(images) {
         images.forEach(function(image) {
