@@ -27,7 +27,7 @@
             </template>
         </form>
 
-        <d3-force id="graph"></d3-force>
+        <d3-force id="graph" linkDistance="100" charge="-1000"></d3-force>
 
         <template if="{{ images }}">
             <template repeat="{{ item, index in selected }}">
