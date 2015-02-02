@@ -31,7 +31,7 @@
 
         <template if="{{ images }}">
             <template repeat="{{ item, index in selected }}">
-                <a class="roll" href="spotify:app:radio:artist:{{ item.id }}"
+                <a class="roll" href="spotify:artist:{{ item.id }}"
                     title="{{ item.name }}" style="background-image:url('{{ item.image }}');
                         transform:translate3d(0, {{ index * 20 }}vh, 0);
                         -webkit-transform:translate3d(0, {{ index * 20 }}vh, 0)"></a>
