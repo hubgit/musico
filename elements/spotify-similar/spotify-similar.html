@@ -28,14 +28,14 @@
             </template>
         </form>
 
-        <d3-force id="graph" linkDistance="100" charge="-1000"></d3-force>
+        <d3-force id="graph" linkDistance="150" charge="-1000"></d3-force>
 
         <template if="{{ images }}">
             <template repeat="{{ item, index in selected }}">
                 <a class="roll" href="spotify:artist:{{ item.id }}"
                     title="{{ item.name }}" style="background-image:url('{{ item.image }}');
-                        transform:translate3d(0, {{ index * 20 }}vh, 0);
-                        -webkit-transform:translate3d(0, {{ index * 20 }}vh, 0)"></a>
+                        transform:translate3d(0, {{ index * 10 }}vh, 0);
+                        -webkit-transform:translate3d(0, {{ index * 10 }}vh, 0)"></a>
             </template>
         </template>
     </template>
