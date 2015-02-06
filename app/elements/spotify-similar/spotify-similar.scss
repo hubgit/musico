@@ -58,3 +58,14 @@ form {
 .roll:hover {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
 }
+
+:host /deep/ .label[data-type="tag"] {
+    background-color: rgb(218, 160, 53);
+    opacity: 0.7;
+    z-index: -10;
+}
+
+:host /deep/ .label[data-type="tag"]:hover {
+    opacity: 1.0;
+    z-index: 200;
+}

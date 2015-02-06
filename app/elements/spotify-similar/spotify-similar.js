@@ -20,12 +20,28 @@ Polymer({
         }.bind(this));
     },
     expand: function(source) {
-        this.addSelection(source);
+        switch (source.type) {
+            case 'artist':
+                this.addSelection(source);
 
-        return this.similar(source);
+                var graph = this.$.graph;
+                this.tags(source).then(function(data) {
+                    graph.addLinks(data);
+                })
+
+                return this.similar(source);
+
+            case 'tag':
+                return false; // TODO
+                //return this.tagArtists(source);
+        }
     },
     nodeSize: function(d) {
-        return 11 + ((d.popularity / 40) * 5) + 'px';
+        if (d.popularity) {
+            return 11 + ((d.popularity / 40) * 5) + 'px';
+        } else {
+            return '13px';
+        }
     },
     bestImage: function(images) {
         images.forEach(function(image) {
@@ -65,6 +81,7 @@ Polymer({
     },
     parse: function(artist) {
         artist.id = artist.uri;
+        artist.type = 'artist';
 
         return artist;
     },
@@ -140,6 +157,50 @@ Polymer({
                 return ({
                     source: source,
                     target: parse(artist)
+                });
+            });
+        });
+    },
+    tags: function(source) {
+        var resource = new Resource('http://ws.audioscrobbler.com/2.0/', {
+        	method: 'artist.gettoptags',
+        	artist: source.name,
+        	api_key: 'f8a6b33c8991fd8465fef6483d3a1c41',
+        	format: 'json'
+        });
+
+        return resource.get('json').then(function(data) {
+            return data.toptags.tag.filter(function(tag) {
+                return Number(tag.count) > 25;
+            }).map(function(tag) {
+                return ({
+                    source: source,
+                    target: {
+                        id: tag.url,
+                        name: tag.name,
+                        type: 'tag'
+                    }
+                });
+            });
+        });
+    },
+    tagArtists: function(source) {
+        var resource = new Resource('http://ws.audioscrobbler.com/2.0/', {
+            method: 'tag.gettopartists',
+            tag: source.name,
+            api_key: 'f8a6b33c8991fd8465fef6483d3a1c41',
+            format: 'json'
+        });
+
+        return resource.get('json').then(function(data) {
+            return data.topartists.artist.slice(0, 10).map(function(artist) {
+                return ({
+                    source: source,
+                    target: {
+                        id: artist.url, // TODO
+                        name: artist.name,
+                        type: 'artist'
+                    }
                 });
             });
         });
