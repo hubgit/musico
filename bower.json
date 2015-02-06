@@ -5,6 +5,7 @@
     "core-elements": "Polymer/core-elements#^0.5.1",
     "paper-elements": "Polymer/paper-elements#^0.5.1",
     "polymer": "Polymer/polymer#^0.5.1",
-    "d3-force": "hubgit/d3-force#master"
+    "d3-force": "hubgit/d3-force#master",
+    "web-resource": "hubgit/web-resource"
   }
 }
