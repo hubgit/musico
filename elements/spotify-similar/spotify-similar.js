@@ -8,6 +8,7 @@ Polymer({
         this.$.search.focus();
         this.selected = [];
         this.images = this.$.graph.clientWidth > 800;
+        this.preload();
     },
     submit: function(e) {
         e.preventDefault();
@@ -67,70 +68,80 @@ Polymer({
 
         return artist;
     },
-    select: function(artist) {
-        this.selected.push({
-            name: artist.name,
-            id: artist.id.replace(/^spotify:artist:/, '')
-        });
+    params: function() {
+        return window.location.search.substr(1).split(/&/).reduce(function(output, part) {
+            var parts = part.split(/=/);
+            var key = decodeURIComponent(parts[0]);
 
-        if (this.selected.length > 3) {
-            this.selected = this.selected.slice(-3);
+            output[key] = decodeURIComponent(parts[1]);
+
+            return output;
+        }, {});
+    },
+    preload: function() {
+        var params = this.params();
+
+        if (params.ids) {
+            var graph = this.$.graph;
+            var parse = this.parse;
+
+            var ids = params.ids.split(/,/).filter(function(item) {
+                return item;
+            }).slice(0, 50).join(','); // max 50 ids
+
+            this.fetch(ids).then(function(artists) {
+                artists.forEach(function(artist) {
+                    if (artist) {
+                        graph.click(parse(artist));
+                    }
+                });
+            });
         }
     },
+    fetch: function(ids) {
+        var resource = new Resource('https://api.spotify.com/v1/artists', {
+            ids: ids
+        });
+
+        return resource.get('json').then(function(data) {
+            return data.artists;
+        });
+    },
     search: function(name) {
-        var q = '"' + name + '"';
-        var url = 'https://api.spotify.com/v1/search?type=artist&limit=10&q=' + encodeURIComponent(q);
         var parse = this.parse;
+        var normalisedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
 
-        return new Promise(function(respond, reject) {
-            var request = new XMLHttpRequest();
-            request.open('GET', url);
-            request.responseType = 'json';
-            request.onload = function() {
-                var normalisedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
+        var resource = new Resource('https://api.spotify.com/v1/search', {
+            type: 'artist',
+            limit: 10,
+            q: '"' + name + '"',
+        });
 
-                var data = this.response;
+        return resource.get('json').then(function(data) {
+            if (!data.artists || !data.artists.items || !data.artists.items.length) {
+                throw 'No matching artists found';
+            }
 
-                if (!data.artists || !data.artists.items || !data.artists.items.length) {
-                    throw 'No matching artists found';
-                }
+            var nameMatches = data.artists.items.filter(function(item) {
+                return item.name.toLowerCase().trim().replace(/[^\w\s]/g, '') === normalisedName;
+            });
 
-                var nameMatches = data.artists.items.filter(function(item) {
-                    return item.name.toLowerCase().trim().replace(/[^\w\s]/g, '') === normalisedName;
-                });
+            var artist = nameMatches.length ? nameMatches[0] : data.artists.items[0];
 
-                var artist = nameMatches.length ? nameMatches[0] : data.artists.items[0];
-
-                respond(parse(artist));
-            };
-            request.onerror = function() {
-                reject();
-            };
-            request.send();
-        }.bind(this));
+            return parse(artist);
+        });
     },
     similar: function(source) {
-        var url = source.href + '/related-artists';
         var parse = this.parse;
+        var resource = new Resource(source.href + '/related-artists');
 
-        return new Promise(function(respond, reject) {
-            var request = new XMLHttpRequest();
-            request.open('GET', url);
-            request.responseType = 'json';
-            request.onload = function() {
-                var links = this.response.artists.map(function(artist) {
-                    return ({
-                        source: source,
-                        target: parse(artist)
-                    });
-                }.bind(this));
-
-                respond(links);
-            };
-            request.onerror = function() {
-                reject();
-            };
-            request.send();
-        }.bind(this));
-    },
+        return resource.get('json').then(function(data) {
+            return data.artists.map(function(artist) {
+                return ({
+                    source: source,
+                    target: parse(artist)
+                });
+            });
+        });
+    }
 });
