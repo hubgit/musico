@@ -73,9 +73,9 @@ Polymer({
             image: this.bestImage(artist.images),
         });
 
-        if (this.selected.length > 5) {
+        if (this.selected.length > 10) {
             this.async(function() {
-                this.selected = this.selected.slice(-5);
+                this.selected = this.selected.slice(-10);
             });
         }
     },
@@ -150,9 +150,11 @@ Polymer({
     },
     similar: function(source) {
         var parse = this.parse;
+        var graph = this.$.graph;
+
         var resource = new Resource(source.href + '/related-artists');
 
-        return resource.get('json').then(function(data) {
+        var request = resource.get('json').then(function(data) {
             return data.artists.map(function(artist) {
                 return ({
                     source: source,
@@ -160,6 +162,16 @@ Polymer({
                 });
             });
         });
+
+        if (this.selected.length === 1) {
+            request.then(function(links) {
+                links.slice(0, 9).forEach(function(link) {
+                    graph.click(link.target);
+                });
+            });
+        }
+
+        return request;
     },
     tags: function(source) {
         var resource = new Resource('http://ws.audioscrobbler.com/2.0/', {
