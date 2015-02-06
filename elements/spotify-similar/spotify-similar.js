@@ -25,22 +25,21 @@ Polymer({
                 this.addSelection(source);
 
                 var graph = this.$.graph;
+
                 this.tags(source).then(function(data) {
                     graph.addLinks(data);
-                })
+                });
 
                 return this.similar(source);
-
-            case 'tag':
-                return false; // TODO
-                //return this.tagArtists(source);
         }
     },
     nodeSize: function(d) {
-        if (d.popularity) {
+        //return 11 + d.inDegree + 'px';
+
+        if (typeof d.popularity !== 'undefined') {
             return 11 + ((d.popularity / 40) * 5) + 'px';
         } else {
-            return '13px';
+            return 20 + d.inDegree + 'px';
         }
     },
     bestImage: function(images) {
@@ -150,7 +149,6 @@ Polymer({
     },
     similar: function(source) {
         var parse = this.parse;
-        var graph = this.$.graph;
 
         var resource = new Resource(source.href + '/related-artists');
 
@@ -162,14 +160,6 @@ Polymer({
                 });
             });
         });
-
-        if (this.selected.length === 1) {
-            request.then(function(links) {
-                links.slice(0, 9).forEach(function(link) {
-                    graph.click(link.target);
-                });
-            });
-        }
 
         return request;
     },
@@ -190,29 +180,11 @@ Polymer({
                     target: {
                         id: tag.url,
                         name: tag.name,
-                        type: 'tag'
-                    }
-                });
-            });
-        });
-    },
-    tagArtists: function(source) {
-        var resource = new Resource('http://ws.audioscrobbler.com/2.0/', {
-            method: 'tag.gettopartists',
-            tag: source.name,
-            api_key: 'f8a6b33c8991fd8465fef6483d3a1c41',
-            format: 'json'
-        });
-
-        return resource.get('json').then(function(data) {
-            return data.topartists.artist.slice(0, 10).map(function(artist) {
-                return ({
-                    source: source,
-                    target: {
-                        id: artist.url, // TODO
-                        name: artist.name,
-                        type: 'artist'
-                    }
+                        type: 'tag',
+                    },
+                    charge: -10000,
+                    distance: 500,
+                    strength: 0.1
                 });
             });
         });
