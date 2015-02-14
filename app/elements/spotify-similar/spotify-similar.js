@@ -125,14 +125,13 @@ Polymer({
             return data.artists;
         });
     },
-    search: function(name) {
+    search: function(artistName) {
         var parse = this.parse;
-        var normalisedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
 
         var resource = new Resource('https://api.spotify.com/v1/search', {
             type: 'artist',
             limit: 10,
-            q: '"' + name + '"',
+            q: '"' + artistName + '"',
         });
 
         return resource.get('json').then(function(data) {
@@ -141,8 +140,16 @@ Polymer({
             }
 
             var nameMatches = data.artists.items.filter(function(item) {
-                return item.name.toLowerCase().trim().replace(/[^\w\s]/g, '') === normalisedName;
+                return item.name.trim() === artistName;
             });
+
+            if (!nameMatches.length) {
+                var normalisedName = artistName.toLowerCase().trim().replace(/[^\w\s]/g, '');
+
+                nameMatches = data.artists.items.filter(function(item) {
+                    return item.name.toLowerCase().trim().replace(/[^\w\s]/g, '') === normalisedName;
+                });
+            }
 
             var artist = nameMatches.length ? nameMatches[0] : data.artists.items[0];
 
