@@ -15,8 +15,10 @@ Polymer({
         this.$.search.blur();
         //this.$.graph.reset();
         //this.selected = [];
-        this.search(this.artist).then(function(artist) {
-            this.$.graph.click(artist);
+        this.artist.trim().split(/\s*,\s*/).forEach(function(artistName) {
+            this.search(artistName).then(function(artist) {
+                this.$.graph.click(artist);
+            }.bind(this));
         }.bind(this));
     },
     expand: function(source) {
