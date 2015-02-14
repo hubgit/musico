@@ -13,8 +13,8 @@ Polymer({
     submit: function(e) {
         e.preventDefault();
         this.$.search.blur();
-        this.$.graph.reset();
-        this.selected = [];
+        //this.$.graph.reset();
+        //this.selected = [];
         this.search(this.artist).then(function(artist) {
             this.$.graph.click(artist);
         }.bind(this));
