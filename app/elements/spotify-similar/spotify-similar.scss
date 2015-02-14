@@ -60,15 +60,10 @@ form {
 }
 
 :host /deep/ .label[data-type="tag"] {
-    background: none;
+    background-color: white;
     box-shadow: none;
-    font-size: 30px !important;
-    opacity: 0.5;
     z-index: -10;
-    color: #000;
-}
-
-:host /deep/ .label[data-type="tag"]:hover {
-    opacity: 1.0;
-    z-index: 200;
+    opacity: 0.3;
+    color: rgb(100, 50, 0);
+    pointer-events: none;
 }
