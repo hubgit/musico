@@ -13,10 +13,19 @@ paper-button {
   border-radius: 50px;
   text-transform: none;
   background-color: rgb(30, 140, 32);
+  transition: background-color 0.5s;
 }
 
 paper-button:hover {
   background-color: #99C900;
+}
+
+#reset {
+    background-color: #700;
+}
+
+#reset:hover {
+    background-color: #f00;
 }
 
 form {
@@ -42,8 +51,8 @@ form {
 
 .roll {
   display: inline-block;
-  width: 10vh;
-  height: 10vh;
+  width: 20vh;
+  height: 20vh;
   background-position: center center;
   background-size: cover;
   border-radius: 50%;
@@ -66,4 +75,14 @@ form {
     opacity: 0.3;
     color: rgb(100, 50, 0);
     pointer-events: none;
+}
+
+.artist-hidden /deep/ [data-type=artist],
+.tag-hidden /deep/ [data-type=tag] {
+    display: none !important;
+}
+
+#display core-label {
+    margin: 10px 0;
+    width: 6em;
 }
