@@ -1,7 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input-decorator.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/core-label/core-label.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/d3-force/d3-force.html">
 <link rel="import" href="../../bower_components/web-resource/web-resource-scripts.html">
@@ -58,6 +60,9 @@
                         -webkit-transform:translate3d(0, {{ index * 20 }}vh, 0)"></a>
             </template>
         </template>
+
+        <paper-icon-button icon="fullscreen" on-click="{{ fullscreen }}"
+            id="fullscreen"></paper-icon-button>
     </template>
 
     <script src="spotify-similar.js"></script>
