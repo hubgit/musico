@@ -25,6 +25,10 @@ Polymer({
         this.selected = [];
         this.submit(event);
     },
+    fullscreen: function(event) {
+        event.preventDefault();
+        screenfull.request(this);
+    },
     updateDisplay: function(event, details, sender) {
         var type = sender.getAttribute('data-display');
         var checked = sender.checked;
