@@ -1,6 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input-decorator.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/core-label/core-label.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/d3-force/d3-force.html">
 <link rel="import" href="../../bower_components/web-resource/web-resource-scripts.html">
 
@@ -17,25 +19,43 @@
                 </div>
 
                 <div>
-                    <paper-button on-tap="{{ submit }}">Search</paper-button>
+                    <paper-button id="search"
+                        on-tap="{{ reset }}">Search</paper-button>
                 </div>
+            </div>
+
+            <div id="display">
+                <core-label layout horizontal center><span flex>Artists</span>
+                    <paper-toggle-button checked for
+                        data-display="artist"
+                        on-tap="{{ updateDisplay }}">
+                    </paper-toggle-button>
+                </core-label>
+                <core-label layout horizontal center>
+                    <span flex>Tags</span>
+                    <paper-toggle-button checked for
+                        data-display="tag"
+                        on-tap="{{ updateDisplay }}">
+                    </paper-toggle-button>
+                </core-label>
             </div>
 
             <template repeat="{{ selected }}">
                 <div>
-                    <a class="play" href="spotify:app:radio:artist:{{ id }}">&#9654; {{ name }}</a>
+                    <a class="play" href="spotify:artist:{{ id }}">&#9654; {{ name }}</a>
                 </div>
             </template>
         </form>
 
-        <d3-force id="graph" linkDistance="100" charge="-1000"></d3-force>
+        <d3-force id="graph" linkDistance="100" charge="-1000"
+            data-display-artists?="{{ nodeTypes.artists }}"></d3-force>
 
         <template if="{{ images }}">
             <template repeat="{{ item, index in selected }}">
-                <a class="roll" href="spotify:artist:{{ item.id }}"
+                <a class="roll" href="spotify:app:radio:artist:{{ item.id }}"
                     title="{{ item.name }}" style="background-image:url('{{ item.image }}');
-                        transform:translate3d(0, {{ index * 10 }}vh, 0);
-                        -webkit-transform:translate3d(0, {{ index * 10 }}vh, 0)"></a>
+                        transform:translate3d(0, {{ index * 20 }}vh, 0);
+                        -webkit-transform:translate3d(0, {{ index * 20 }}vh, 0)"></a>
             </template>
         </template>
     </template>

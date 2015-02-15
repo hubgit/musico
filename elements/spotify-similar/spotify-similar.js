@@ -10,14 +10,32 @@ Polymer({
         this.images = this.$.graph.clientWidth > 800;
         this.preload();
     },
-    submit: function(e) {
-        e.preventDefault();
+    submit: function(event) {
+        event.preventDefault();
         this.$.search.blur();
-        //this.$.graph.reset();
-        //this.selected = [];
-        this.search(this.artist).then(function(artist) {
-            this.$.graph.click(artist);
+        this.artist.trim().split(/\s*,\s*/).forEach(function(artistName) {
+            this.search(artistName).then(function(artist) {
+                this.$.graph.click(artist);
+            }.bind(this));
         }.bind(this));
+    },
+    reset: function(event) {
+        event.preventDefault();
+        this.$.graph.reset();
+        this.selected = [];
+        this.submit(event);
+    },
+    updateDisplay: function(event, details, sender) {
+        var type = sender.getAttribute('data-display');
+        var checked = sender.checked;
+
+        console.log(type, checked);
+
+        if (checked) {
+            this.$.graph.classList.remove(type + '-hidden');
+        } else {
+            this.$.graph.classList.add(type + '-hidden');
+        }
     },
     expand: function(source) {
         switch (source.type) {
@@ -34,12 +52,10 @@ Polymer({
         }
     },
     nodeSize: function(d) {
-        //return 11 + d.inDegree + 'px';
-
         if (typeof d.popularity !== 'undefined') {
-            return 11 + ((d.popularity / 40) * 5) + 'px';
+            return 70 + d.popularity + '%';
         } else {
-            return 20 + d.inDegree + 'px';
+            return 100 + (d.inDegree * 10) + '%';
         }
     },
     bestImage: function(images) {
@@ -54,8 +70,6 @@ Polymer({
         return images.length ? images[0].url : 'images/placeholder.png';
     },
     addSelection: function(artist) {
-        artist.selected = true;
-
         var identifier = artist.id.replace(/^spotify:artist:/, '');
 
         var existing = this.selected.some(function(item) {
@@ -72,9 +86,9 @@ Polymer({
             image: this.bestImage(artist.images),
         });
 
-        if (this.selected.length > 10) {
+        if (this.selected.length > 5) {
             this.async(function() {
-                this.selected = this.selected.slice(-10);
+                this.selected = this.selected.slice(-5);
             });
         }
     },
@@ -123,14 +137,13 @@ Polymer({
             return data.artists;
         });
     },
-    search: function(name) {
+    search: function(artistName) {
         var parse = this.parse;
-        var normalisedName = name.toLowerCase().trim().replace(/[^\w\s]/g, '');
 
         var resource = new Resource('https://api.spotify.com/v1/search', {
             type: 'artist',
-            limit: 10,
-            q: '"' + name + '"',
+            limit: 20,
+            q: '"' + artistName + '"',
         });
 
         return resource.get('json').then(function(data) {
@@ -139,8 +152,16 @@ Polymer({
             }
 
             var nameMatches = data.artists.items.filter(function(item) {
-                return item.name.toLowerCase().trim().replace(/[^\w\s]/g, '') === normalisedName;
+                return item.name.trim() === artistName;
             });
+
+            if (!nameMatches.length) {
+                var normalisedName = artistName.toLowerCase().trim().replace(/[^\w\s]/g, '');
+
+                nameMatches = data.artists.items.filter(function(item) {
+                    return item.name.toLowerCase().trim().replace(/[^\w\s]/g, '') === normalisedName;
+                });
+            }
 
             var artist = nameMatches.length ? nameMatches[0] : data.artists.items[0];
 
