@@ -23,7 +23,7 @@
 
             <template repeat="{{ selected }}">
                 <div>
-                    <a class="play" href="spotify:app:radio:artist:{{ id }}">&#9654; {{ name }}</a>
+                    <a class="play" href="spotify:artist:{{ id }}">&#9654; {{ name }}</a>
                 </div>
             </template>
         </form>
@@ -32,7 +32,7 @@
 
         <template if="{{ images }}">
             <template repeat="{{ item, index in selected }}">
-                <a class="roll" href="spotify:artist:{{ item.id }}"
+                <a class="roll" href="spotify:app:radio:artist:{{ item.id }}"
                     title="{{ item.name }}" style="background-image:url('{{ item.image }}');
                         transform:translate3d(0, {{ index * 10 }}vh, 0);
                         -webkit-transform:translate3d(0, {{ index * 10 }}vh, 0)"></a>
