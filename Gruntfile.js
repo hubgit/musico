@@ -209,16 +209,6 @@ module.exports = function (grunt) {
         }
       }
     },
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg,svg}',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
     minifyHtml: {
       options: {
         quotes: true,
@@ -331,7 +321,7 @@ module.exports = function (grunt) {
     'sass',
     'copy',
     'useminPrepare',
-    'imagemin',
+    //'imagemin',
     'concat',
     'autoprefixer',
     'uglify',
