@@ -121,7 +121,7 @@ Polymer({
 
             var ids = params.ids.split(/,/).filter(function(item) {
                 return item;
-            }).slice(0, 50).join(','); // max 50 ids
+            }).join(','); // max 50 ids
 
             this.fetch(ids).then(function(artists) {
                 artists.forEach(function(artist) {
